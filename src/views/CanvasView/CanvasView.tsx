@@ -6,6 +6,7 @@ import { PencilIcon } from '@heroicons/react/24/solid'
 import { StyledCanvasView } from '.'
 
 const colors = [
+  '#000000',
   '#dc2626',
   '#ea580c',
   '#fbbf24',
