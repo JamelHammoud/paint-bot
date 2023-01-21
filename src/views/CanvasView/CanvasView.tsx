@@ -58,7 +58,7 @@ const CanvasView: FC = () => {
       uid: params?.uid
     }
 
-    await fetch('http://156.34.49.214:52635/send', {
+    await fetch('https://e42b-156-34-49-214.ngrok.io/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
