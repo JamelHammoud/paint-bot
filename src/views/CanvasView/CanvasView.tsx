@@ -1,8 +1,7 @@
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon } from '@heroicons/react/20/solid'
-import { PencilIcon } from '@heroicons/react/24/solid'
+import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon } from '@heroicons/react/20/solid'
 import { StyledCanvasView } from '.'
 
 const colors = [
@@ -92,10 +91,6 @@ const CanvasView: FC = () => {
       </div>
       <div className="canvas-actions">
         <div className="canvas-actions-group">
-          <button onClick={() => undo()}><ArrowUturnLeftIcon/></button>
-          <button onClick={() => redo()}><ArrowUturnRightIcon/></button>
-        </div>
-        <div className="canvas-actions-group">
           <div className="canvas-actions-group canvas-tool">
             <button aria-selected={mode === 'pencil'} onClick={() => switchMode('pencil')}>
               <PencilIcon/>
@@ -107,32 +102,38 @@ const CanvasView: FC = () => {
               <TrashIcon/>
             </button>
           </div>
-          <hr className="vertical"/>
-          <div className="canvas-actions-group canvas-brush-size">
-            <button aria-selected={size === 3} onClick={() => setSize(3)}>
-              <div/>
-            </button>
-            <button aria-selected={size === 5} onClick={() => setSize(5)}>
-              <div/>
-            </button>
-            <button aria-selected={size === 8} onClick={() => setSize(8)}>
-              <div/>
-            </button>
-            <button aria-selected={size === 14} onClick={() => setSize(14)}>
-              <div/>
-            </button>
-          </div>
+        </div>
+        <div className="canvas-actions-group">
+          <button onClick={() => undo()}><ArrowUturnLeftIcon/></button>
+          <button onClick={() => redo()}><ArrowUturnRightIcon/></button>
         </div>
       </div>
-      <hr/>
-      <div className="canvas-colors">
-        {colors.map((c) => 
-           (<button aria-selected={c === color} onClick={() => setColor(c)}>
-            <div className="color-preview" style={{ backgroundColor: c }} />
-          </button>)
-        )}
+      <div className="canvas-actions">
+        <div className="canvas-actions-group canvas-brush-size">
+          <button aria-selected={size === 3} onClick={() => setSize(3)}>
+            <div/>
+          </button>
+          <button aria-selected={size === 5} onClick={() => setSize(5)}>
+            <div/>
+          </button>
+          <button aria-selected={size === 8} onClick={() => setSize(8)}>
+            <div/>
+          </button>
+          <button aria-selected={size === 14} onClick={() => setSize(14)}>
+            <div/>
+          </button>
+          <button aria-selected={size === 30} onClick={() => setSize(30)}>
+            <div/>
+          </button>
+        </div>
+        <div className="canvas-colors">
+          {colors.map((c) => 
+             (<button aria-selected={c === color} onClick={() => setColor(c)}>
+              <div className="color-preview" style={{ backgroundColor: c }} />
+            </button>)
+          )}
+        </div>
       </div>
-      <hr/>
       <button className="send-button" onClick={() => sendMessage()}>Send in #{channelName}</button>
     </StyledCanvasView>
   )

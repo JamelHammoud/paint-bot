@@ -3,11 +3,14 @@ import styled from 'styled-components'
 const StyledCanvasView = styled.div`
   max-width: 500px;
   padding: 20px;
+  margin: 0 auto;
 
   .canvas-container {
     padding-top: 100%;
     position: relative;
     border: 2px solid black !important;
+    border-radius: 4px;
+    overflow: hidden;
 
     .canvas {
       border-radius: 0 !important;
@@ -32,13 +35,14 @@ const StyledCanvasView = styled.div`
       background-color: white;
       transition: 0.2s;
       flex-shrink: 0;
+      border-radius: 4px;
 
       svg {
         height: 22px;
       }
 
       &:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 8px;
       }
 
       &:hover {
@@ -52,12 +56,12 @@ const StyledCanvasView = styled.div`
       }
 
       &[aria-selected="true"] {
-        border-color: ${({ theme }) => theme.color.blue[600]};
+        border-color: ${({ theme }) => theme.color.blue[800]};
         background-color: ${({ theme }) => theme.color.blue[100]};
-        color: ${({ theme }) => theme.color.blue[600]};
+        color: ${({ theme }) => theme.color.blue[800]};
 
         &:hover {
-          box-shadow: 0 2px 0 0 ${({ theme }) => theme.color.blue[600]};
+          box-shadow: 0 2px 0 0 ${({ theme }) => theme.color.blue[800]};
         }
 
         &:active {
@@ -112,9 +116,16 @@ const StyledCanvasView = styled.div`
           }
         }
 
+        &:nth-of-type(5) {
+          div {
+            width: 24px;
+            height: 24px;
+          }
+        }
+
         &[aria-selected="true"] {
           div {
-            background-color: ${({ theme }) => theme.color.blue[600]};
+            background-color: ${({ theme }) => theme.color.blue[800]};
           }
         }
       }
@@ -125,7 +136,9 @@ const StyledCanvasView = styled.div`
     display: flex;
     overflow-x: auto;
     padding-top: 5px;
-    margin-top: -5px;
+    position: relative;
+    padding-left: 20px;
+    margin: -5px 0 20px 0;
 
     button {
       position: relative;
@@ -136,7 +149,27 @@ const StyledCanvasView = styled.div`
         left: 0;
         right: 0;
         bottom: 0;
+        box-shadow: inset 0 0 0 3px white;
+        border-radius: 5px;
       }
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .canvas-brush-size {
+    padding-right: 21px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 36px;
+      right: 0;
+      width: 2px;
+      background-color: black;
     }
   }
 
@@ -163,6 +196,7 @@ const StyledCanvasView = styled.div`
     justify-content: center;
     font-weight: 500;
     transition: 0.2s;
+    border-radius: 4px;
 
     &:hover {
       transform: translateY(-2px);
