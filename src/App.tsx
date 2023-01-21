@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { Global, ROUTES, theme } from './utils'
 import { persistor, store } from './redux'
 
-import { ExampleView } from './views'
+import { CanvasView, ExampleView } from './views'
 
 const App: FC = () => {
   return (
@@ -18,6 +18,7 @@ const App: FC = () => {
             {/* Routes here */}
             <Switch>
               <Route path={ROUTES.App.home} component={ExampleView} exact/>
+              <Route path={ROUTES.App.canvas} component={CanvasView} exact/>
             </Switch>
           </Router>
         </ThemeProvider>

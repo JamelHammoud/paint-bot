@@ -1,5 +1,6 @@
 const App = {
-  home: '/'
+  home: '/',
+  canvas: '/canvas'
 }
 
 export const ROUTES = {
