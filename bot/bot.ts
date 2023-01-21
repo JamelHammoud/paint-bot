@@ -13,14 +13,14 @@ const createButton = (interactionId: string, userId: string) => {
   return new ActionRowBuilder()
     .addComponents(
       new ButtonBuilder()
-        .setURL(`http://localhost:3000/canvas?iid=${interactionId}&uid=${userId}`)
+        .setURL(`https://paint-bot.netlify.app?iid=${interactionId}&uid=${userId}`)
         .setLabel('Open Canvas')
         .setStyle(ButtonStyle.Link)
     )
 }
 
 const app = express()
-const PORT = 2053
+const PORT = 52635
 
 app.use(cors({ origin: '*' }))
 app.use(express.urlencoded({ extended: true }))

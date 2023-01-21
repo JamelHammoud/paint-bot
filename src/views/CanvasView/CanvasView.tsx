@@ -58,7 +58,7 @@ const CanvasView: FC = () => {
       uid: params?.uid
     }
 
-    await fetch('http://localhost:2053/send', {
+    await fetch('http://156.34.49.214:52635/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

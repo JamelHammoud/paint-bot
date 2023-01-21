@@ -17,8 +17,7 @@ const App: FC = () => {
           <Router>
             {/* Routes here */}
             <Switch>
-              <Route path={ROUTES.App.home} component={ExampleView} exact/>
-              <Route path={ROUTES.App.canvas} component={CanvasView} exact/>
+              <Route path={ROUTES.App.home} component={CanvasView} exact/>
             </Switch>
           </Router>
         </ThemeProvider>
