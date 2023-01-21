@@ -28,6 +28,7 @@ const CanvasView: FC = () => {
   const [size, setSize] = useState(5)
   const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
   const [color, setColor] = useState(colors[0])
+  const [channelName, setChannelName] = useState('general')
 
   const undo = () => {
     canvas.current?.undo()
@@ -55,7 +56,8 @@ const CanvasView: FC = () => {
     const body = {
       image,
       iid: params?.iid,
-      uid: params?.uid
+      uid: params?.uid,
+      cid: params?.cid
     }
 
     await fetch('https://e42b-156-34-49-214.ngrok.io/send', {
@@ -66,6 +68,13 @@ const CanvasView: FC = () => {
       body: JSON.stringify(body)
     })
   }
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const params = Object.fromEntries(urlParams)
+
+    setChannelName(params?.cname || 'general')
+  }, [location.search])
 
   return (
     <StyledCanvasView>
@@ -121,7 +130,7 @@ const CanvasView: FC = () => {
         )}
       </div>
       <hr/>
-      <button className="send-button" onClick={() => sendMessage()}>Send in #general</button>
+      <button className="send-button" onClick={() => sendMessage()}>Send in #{channelName}</button>
     </StyledCanvasView>
   )
 }
