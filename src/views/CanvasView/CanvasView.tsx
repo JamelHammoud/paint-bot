@@ -67,6 +67,8 @@ const CanvasView: FC = () => {
       },
       body: JSON.stringify(body)
     })
+
+    window.close()
   }
 
   useEffect(() => {
