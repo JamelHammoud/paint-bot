@@ -1,7 +1,14 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
+
+const checkAnim = keyframes`
+  to {
+    stroke-dashoffset: 0;
+  }
+`
 
 type StyledProps = {
   mode: 'pencil' | 'eraser'
+  sent?: boolean
 }
 
 const StyledCanvasView = styled.div<StyledProps>`
@@ -117,6 +124,44 @@ const StyledCanvasView = styled.div<StyledProps>`
   .send-button {
     height: 42px;
   }
+
+  .try-another-message {
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: ${({ theme }) => theme.color.gray[600]};
+
+    a {
+      color: ${({ theme }) => theme.color.gray[900]};
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
+
+  ${({ sent, theme }) => sent && css`
+    .canvas-container {
+      pointer-events: none;
+    }
+
+    .send-button {
+      background-color: ${theme.color.purple[800]};
+      color: ${theme.color.background};
+      pointer-events: none;
+
+      svg {
+        margin-right: 6px;
+
+        path {
+          stroke-width: 2.2px;
+          stroke-dasharray: 1000;
+          stroke-dashoffset: 1000;
+          animation: ${checkAnim} 15s linear forwards;
+        }
+      }
+    }
+  `}
 `
 
 export default StyledCanvasView

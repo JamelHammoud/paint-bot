@@ -1,7 +1,7 @@
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { Button, ColorRow, SizeRow } from '../../components'
 import { StyledCanvasView } from '.'
 
@@ -12,6 +12,7 @@ const CanvasView: FC = () => {
   const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
   const [color, setColor] = useState('#000000')
   const [channelName, setChannelName] = useState('general')
+  const [sent, setSent] = useState(false)
 
   const undo = () => {
     canvas.current?.undo()
@@ -31,27 +32,41 @@ const CanvasView: FC = () => {
     canvas.current?.eraseMode(isEraseMode)
   }
 
+  const resetState = () => {
+    setSent(false)
+    switchMode('pencil')
+    setSize(5)
+    setColor('#000000')
+    canvas.current?.resetCanvas()
+  }
+
   const sendMessage = async () => {
-    const urlParams = new URLSearchParams(location.search)
-    const params = Object.fromEntries(urlParams)
-    const image = await canvas.current?.exportImage('png')
+    try {
+      const urlParams = new URLSearchParams(location.search)
+      const params = Object.fromEntries(urlParams)
+      const image = await canvas.current?.exportImage('png')
 
-    const body = {
-      image,
-      iid: params?.iid,
-      uid: params?.uid,
-      cid: params?.cid
+      const body = {
+        image,
+        iid: params?.iid,
+        uid: params?.uid,
+        cid: params?.cid
+      }
+
+      await fetch('https://paint-bot.up.railway.app/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+
+      window.close()
+      setSent(true)
     }
-
-    await fetch('https://paint-bot.up.railway.app/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-
-    window.close()
+    catch (err) {
+      console.error(err)
+    }
   }
 
   useEffect(() => {
@@ -62,7 +77,7 @@ const CanvasView: FC = () => {
   }, [location.search])
 
   return (
-    <StyledCanvasView mode={mode}>
+    <StyledCanvasView mode={mode} sent={sent}>
       <div className="canvas-header">
         <div className="canvas-logo">
           <img src="/paint-icon.png" alt="Paint Logo"/>
@@ -103,7 +118,11 @@ const CanvasView: FC = () => {
         <SizeRow value={size} onSelect={(size) => setSize(size)} />
       </div>
       <ColorRow value={color} onSelect={(color) => setColor(color)} />
-      <Button className="send-button" onClick={() => sendMessage()}>Send in #{channelName}</Button>
+      <Button className="send-button" disabled={sent} onClick={() => sendMessage()}>
+        {!sent && `Send in #${channelName}`}
+        {sent && <><CheckIcon className="check-icon"/> Painting sent</>}
+      </Button>
+      {sent && <span className="try-another-message">Want to paint something else? <a onClick={() => resetState()}>Reset canvas</a>.</span>}
     </StyledCanvasView>
   )
 }
