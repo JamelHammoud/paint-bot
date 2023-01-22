@@ -1,7 +1,7 @@
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon } from '@heroicons/react/20/solid'
+import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
 import { StyledCanvasView } from '.'
 
 const colors = [
@@ -96,7 +96,7 @@ const CanvasView: FC = () => {
               <PencilIcon/>
             </button>
             <button aria-selected={mode === 'eraser'} onClick={() => switchMode('eraser')}>
-              E
+              Er
             </button>
             <button onClick={() => clear()}>
               <TrashIcon/>

@@ -24,7 +24,7 @@ const StyledCanvasView = styled.div`
     }
   }
 
-  .canvas-actions, .canvas-colors {
+  .canvas-actions {
     button {
       height: 36px;
       width: 36px;
@@ -36,9 +36,11 @@ const StyledCanvasView = styled.div`
       transition: 0.2s;
       flex-shrink: 0;
       border-radius: 4px;
+      font-weight: 600;
 
       svg {
         height: 22px;
+        stroke-width: 2.25px;
       }
 
       &:not(:last-child) {
@@ -194,7 +196,7 @@ const StyledCanvasView = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
+    font-weight: 600;
     transition: 0.2s;
     border-radius: 4px;
 
