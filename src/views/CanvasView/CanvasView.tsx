@@ -43,7 +43,7 @@ const CanvasView: FC = () => {
       cid: params?.cid
     }
 
-    await fetch('https://e42b-156-34-49-214.ngrok.io/send', {
+    await fetch('https://paint-bot.up.railway.app/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
