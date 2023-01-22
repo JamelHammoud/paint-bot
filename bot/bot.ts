@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import Cryptr from 'cryptr'
 import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
 import { sample } from 'lodash'
 
@@ -11,10 +12,20 @@ const bot = new Client({
 })
 
 const createButton = (interactionId: string, userId: string, channelId: string, channelName: string) => {
+  const secret = process.env.SECRET!
+  const cryptr = new Cryptr(secret)
+  const object = {
+    iid: interactionId,
+    uid: userId,
+    cid: channelId,
+    cname: channelName
+  }
+  const pid = cryptr.encrypt(JSON.stringify(object))
+
   return new ActionRowBuilder()
     .addComponents(
       new ButtonBuilder()
-        .setURL(`https://paint-bot.netlify.app?iid=${interactionId}&uid=${userId}&cid=${channelId}&cname=${channelName}`)
+        .setURL(`https://paint-bot.netlify.app?pid=${pid}`)
         .setLabel('Open Canvas')
         .setStyle(ButtonStyle.Link)
     )
@@ -90,4 +101,4 @@ bot.on('ready', () => {
   console.log('ready')
 })
 
-bot.login(process.env.REACT_APP_BOT_KEY)
+bot.login(process.env.BOT_KEY)

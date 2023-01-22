@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "yarn env:staging react-scripts start",
-    "build": "yarn env:staging react-scripts build",
-    "env:staging": "dotenv -e .env.development",
-    "env:production": "dotenv -e .env.production",
+    "start": "yarn env react-scripts start",
+    "build": "yarn env react-scripts build",
+    "env": "dotenv -e .env",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "paint": "tsc && dotenv -e .env node built/src/paint.js"
@@ -14,6 +13,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.13",
     "@reduxjs/toolkit": "^1.8.2",
+    "cryptr": "^6.1.0",
     "discord.js": "^14.7.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -30,6 +30,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/cryptr": "^4.0.1",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",

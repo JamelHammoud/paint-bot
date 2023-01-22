@@ -1,3 +1,4 @@
+import Cryptr from 'cryptr'
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
@@ -6,6 +7,7 @@ import { Button, ColorRow, SizeRow } from '../../components'
 import { StyledCanvasView } from '.'
 
 const CanvasView: FC = () => {
+  const cryptr = new Cryptr(process.env.REACT_APP_SECRET!)
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
   const [size, setSize] = useState(5)
@@ -44,13 +46,18 @@ const CanvasView: FC = () => {
     try {
       const urlParams = new URLSearchParams(location.search)
       const params = Object.fromEntries(urlParams)
+
+      if (!params.pid) {
+        return
+      }
+
+      const decryptedString = cryptr.decrypt(params.pid)
+      const session = JSON.parse(decryptedString)
       const image = await canvas.current?.exportImage('png')
 
       const body = {
         image,
-        iid: params?.iid,
-        uid: params?.uid,
-        cid: params?.cid
+        ...session
       }
 
       await fetch('https://paint-bot.up.railway.app/send', {
@@ -73,7 +80,14 @@ const CanvasView: FC = () => {
     const urlParams = new URLSearchParams(location.search)
     const params = Object.fromEntries(urlParams)
 
-    setChannelName(params?.cname || 'general')
+    if (!params.pid) {
+      return
+    }
+
+    const decryptedString = cryptr.decrypt(params.pid)
+    const session = JSON.parse(decryptedString)
+
+    setChannelName(session?.cname || 'general')
   }, [location.search])
 
   return (
