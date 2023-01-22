@@ -2,32 +2,15 @@ import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { Button, ColorRow, SizeRow } from '../../components'
 import { StyledCanvasView } from '.'
-
-const colors = [
-  '#000000',
-  '#dc2626',
-  '#ea580c',
-  '#fbbf24',
-  '#84cc16',
-  '#22c55e',
-  '#059669',
-  '#0d9488',
-  '#06b6d4',
-  '#0ea5e9',
-  '#2563eb',
-  '#4f46e5',
-  '#a855f7',
-  '#ec4899',
-  '#f43f5e'
-]
 
 const CanvasView: FC = () => {
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
   const [size, setSize] = useState(5)
   const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
-  const [color, setColor] = useState(colors[0])
+  const [color, setColor] = useState('#000000')
   const [channelName, setChannelName] = useState('general')
 
   const undo = () => {
@@ -79,7 +62,21 @@ const CanvasView: FC = () => {
   }, [location.search])
 
   return (
-    <StyledCanvasView>
+    <StyledCanvasView mode={mode}>
+      <div className="canvas-header">
+        <div className="canvas-logo">
+          <img src="/paint-icon.png" alt="Paint Logo"/>
+          <h1>Paint</h1>
+        </div>
+        <div className="canvas-header-actions">
+          <Button isIcon onClick={() => undo()}>
+            <ArrowUturnLeftIcon/>
+          </Button>
+          <Button isIcon onClick={() => redo()}>
+            <ArrowUturnRightIcon/>
+          </Button>
+        </div>
+      </div>
       <div className="canvas-container">
         <ReactSketchCanvas
           className="canvas"
@@ -91,50 +88,22 @@ const CanvasView: FC = () => {
       </div>
       <div className="canvas-actions">
         <div className="canvas-actions-group">
-          <div className="canvas-actions-group canvas-tool">
-            <button aria-selected={mode === 'pencil'} onClick={() => switchMode('pencil')}>
+          <div className="canvas-actions-group canvas-tools">
+            <Button isIcon isActive={mode === 'pencil'} onClick={() => switchMode('pencil')}>
               <PencilIcon/>
-            </button>
-            <button aria-selected={mode === 'eraser'} onClick={() => switchMode('eraser')}>
+            </Button>
+            <Button isIcon isActive={mode === 'eraser'} onClick={() => switchMode('eraser')}>
               Er
-            </button>
-            <button onClick={() => clear()}>
+            </Button>
+            <Button className="clear-btn" isIcon onClick={() => clear()}>
               <TrashIcon/>
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="canvas-actions-group">
-          <button onClick={() => undo()}><ArrowUturnLeftIcon/></button>
-          <button onClick={() => redo()}><ArrowUturnRightIcon/></button>
-        </div>
+        <SizeRow value={size} onSelect={(size) => setSize(size)} />
       </div>
-      <div className="canvas-actions">
-        <div className="canvas-actions-group canvas-brush-size">
-          <button aria-selected={size === 3} onClick={() => setSize(3)}>
-            <div/>
-          </button>
-          <button aria-selected={size === 5} onClick={() => setSize(5)}>
-            <div/>
-          </button>
-          <button aria-selected={size === 8} onClick={() => setSize(8)}>
-            <div/>
-          </button>
-          <button aria-selected={size === 14} onClick={() => setSize(14)}>
-            <div/>
-          </button>
-          <button aria-selected={size === 30} onClick={() => setSize(30)}>
-            <div/>
-          </button>
-        </div>
-        <div className="canvas-colors">
-          {colors.map((c) => 
-             (<button aria-selected={c === color} onClick={() => setColor(c)}>
-              <div className="color-preview" style={{ backgroundColor: c }} />
-            </button>)
-          )}
-        </div>
-      </div>
-      <button className="send-button" onClick={() => sendMessage()}>Send in #{channelName}</button>
+      <ColorRow value={color} onSelect={(color) => setColor(color)} />
+      <Button className="send-button" onClick={() => sendMessage()}>Send in #{channelName}</Button>
     </StyledCanvasView>
   )
 }

@@ -1,6 +1,5 @@
 import { createRef, FC, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { ExampleComponent } from '../../components/ExampleComponent'
 import { StyledExampleView } from '.'
 
 const ExampleView: FC = () => {
@@ -13,7 +12,6 @@ const ExampleView: FC = () => {
 
   return (
     <StyledExampleView>
-      <ExampleComponent/>
       <a target="popup" ref={ref} onClick={() => openLink()} >
         Start Painting
       </a>
