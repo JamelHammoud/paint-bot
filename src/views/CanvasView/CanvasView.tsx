@@ -10,6 +10,7 @@ const CanvasView: FC = () => {
   const cryptr = new Cryptr(process.env.REACT_APP_SECRET!)
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
+  const [loading, setLoading] = useState(false)
   const [size, setSize] = useState(5)
   const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
   const [color, setColor] = useState('#000000')
@@ -44,6 +45,8 @@ const CanvasView: FC = () => {
 
   const sendMessage = async () => {
     try {
+      setLoading(true)
+
       const urlParams = new URLSearchParams(location.search)
       const params = Object.fromEntries(urlParams)
 
@@ -73,6 +76,9 @@ const CanvasView: FC = () => {
     }
     catch (err) {
       console.error(err)
+    }
+    finally {
+      setLoading(false)
     }
   }
 
@@ -132,7 +138,7 @@ const CanvasView: FC = () => {
         <SizeRow value={size} onSelect={(size) => setSize(size)} />
       </div>
       <ColorRow value={color} onSelect={(color) => setColor(color)} />
-      <Button className="send-button" disabled={sent} onClick={() => sendMessage()}>
+      <Button className="send-button" disabled={sent || loading} onClick={() => sendMessage()}>
         {!sent && `Send in #${channelName}`}
         {sent && <><CheckIcon className="check-icon"/> Painting sent</>}
       </Button>
