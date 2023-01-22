@@ -4,7 +4,7 @@ import { Routes } from 'discord-api-types/v9'
 
 const apiToken = process.env.REACT_APP_BOT_KEY!
 const clientId = '1066192909109567489'
-const guildId = '809884420130734100'
+const guildId = '796600091430354974'
 
 const commands = [
 	new SlashCommandBuilder()

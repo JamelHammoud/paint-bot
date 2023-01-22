@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
+import { sample } from 'lodash'
 
 const bot = new Client({
   intents: [
@@ -9,11 +10,11 @@ const bot = new Client({
   ]
 })
 
-const createButton = (interactionId: string, userId: string) => {
+const createButton = (interactionId: string, userId: string, channelId: string, channelName: string) => {
   return new ActionRowBuilder()
     .addComponents(
       new ButtonBuilder()
-        .setURL(`https://paint-bot.netlify.app?iid=${interactionId}&uid=${userId}`)
+        .setURL(`https://paint-bot.netlify.app?iid=${interactionId}&uid=${userId}&cid=${channelId}&cname=${channelName}`)
         .setLabel('Open Canvas')
         .setStyle(ButtonStyle.Link)
     )
@@ -26,19 +27,31 @@ app.use(cors({ origin: '*' }))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+const specialWords = [
+  'drew',
+  'created this masterpiece',
+  'painted',
+  'sculpted',
+  'composed',
+  'designed',
+  'invented',
+  'rendered',
+  'illustrated',
+  'sketched'
+]
+
 app.listen(PORT, () => {
   return console.log(`Server is listening on ${PORT}`)
 })
 
 app.post('/send', (req, res) => {
-  const { image, iid, uid } = req.body
+  const { image, iid, uid, cid } = req.body
 
-  if (!image || !iid || !uid) {
+  if (!image || !iid || !uid || !cid) {
     throw new Error ('Invalid parameters')
   }
 
-  const channelId = '999703318442033272'
-  const channel = bot.channels.cache.get(channelId) as any
+  const channel = bot.channels.cache.get(cid) as any
 
   if (!channel) {
     throw new Error ('Could not find channel')
@@ -47,7 +60,7 @@ app.post('/send', (req, res) => {
   const sfbuff = Buffer.from(image.split(',')[1], 'base64')
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
 
-  channel.send({ content: `<@${uid}> drew:`, files: [attachment] })
+  channel.send({ content: `<@${uid}> ${sample(specialWords)}:`, files: [attachment] })
 
   res.json({
     status: 'ok'
@@ -59,16 +72,15 @@ bot.on('interactionCreate', async (interaction) => {
     return
   }
 
-  const { commandName, user } = interaction
+  const { commandName, user, channel, channelId } = interaction
 
   if (commandName !== 'paint') {
     return
   }
   
-  const button = createButton(interaction.id, user.id)
+  const button = createButton(interaction.id, user.id, channelId, (channel as any).name)
 
   await interaction.reply({
-    content: 'Click here',
     components: [button as any],
     ephemeral: true
   })
