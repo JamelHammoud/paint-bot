@@ -17,15 +17,14 @@ const createButton = (interactionId: string, userId: string, channelId: string, 
   const object = {
     iid: interactionId,
     uid: userId,
-    cid: channelId,
-    cname: channelName
+    cid: channelId
   }
   const pid = cryptr.encrypt(JSON.stringify(object))
 
   return new ActionRowBuilder()
     .addComponents(
       new ButtonBuilder()
-        .setURL(`https://paint-bot.netlify.app?pid=${pid}`)
+        .setURL(`https://paint-bot.netlify.app?pid=${pid}&cname=${channelName}`)
         .setLabel('Open Canvas')
         .setStyle(ButtonStyle.Link)
     )

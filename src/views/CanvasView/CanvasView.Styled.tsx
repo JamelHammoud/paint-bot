@@ -123,6 +123,10 @@ const StyledCanvasView = styled.div<StyledProps>`
 
   .send-button {
     height: 42px;
+
+    &:disabled {
+      pointer-events: none;
+    }
   }
 
   .try-another-message {
@@ -148,7 +152,6 @@ const StyledCanvasView = styled.div<StyledProps>`
     .send-button {
       background-color: ${theme.color.purple[800]};
       color: ${theme.color.background};
-      pointer-events: none;
 
       svg {
         margin-right: 6px;

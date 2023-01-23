@@ -3,7 +3,7 @@ import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
-import { Button, ColorRow, SizeRow } from '../../components'
+import { Button, ColorRow, SizeRow, Spinner } from '../../components'
 import { StyledCanvasView } from '.'
 
 const CanvasView: FC = () => {
@@ -11,11 +11,11 @@ const CanvasView: FC = () => {
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
   const [loading, setLoading] = useState(false)
+  const [sent, setSent] = useState(false)
   const [size, setSize] = useState(5)
   const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
   const [color, setColor] = useState('#000000')
   const [channelName, setChannelName] = useState('general')
-  const [sent, setSent] = useState(false)
 
   const undo = () => {
     canvas.current?.undo()
@@ -41,6 +41,15 @@ const CanvasView: FC = () => {
     setSize(5)
     setColor('#000000')
     canvas.current?.resetCanvas()
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.shiftKey && e.metaKey && e.key === 'z') {
+      return redo()
+    }
+    if (e.metaKey && e.key === 'z') {
+      return undo()
+    }
   }
 
   const sendMessage = async () => {
@@ -85,16 +94,16 @@ const CanvasView: FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
     const params = Object.fromEntries(urlParams)
-
-    if (!params.pid) {
-      return
-    }
-
-    const decryptedString = cryptr.decrypt(params.pid)
-    const session = JSON.parse(decryptedString)
-
-    setChannelName(session?.cname || 'general')
+    setChannelName(params?.cname || 'general')
   }, [location.search])
+
+  useEffect(() => {
+    document.addEventListener('keydown', (e) => handleKeyDown(e))
+
+    return () => {
+      document.removeEventListener('keydown', (e) => handleKeyDown(e))
+    }
+  }, [])
 
   return (
     <StyledCanvasView mode={mode} sent={sent}>
@@ -139,8 +148,9 @@ const CanvasView: FC = () => {
       </div>
       <ColorRow value={color} onSelect={(color) => setColor(color)} />
       <Button className="send-button" disabled={sent || loading} onClick={() => sendMessage()}>
-        {!sent && `Send in #${channelName}`}
-        {sent && <><CheckIcon className="check-icon"/> Painting sent</>}
+        {!sent && !loading && `Send in #${channelName}`}
+        {sent && !loading && <><CheckIcon className="check-icon"/> Painting sent</>}
+        {loading && <Spinner/>}
       </Button>
       {sent && <span className="try-another-message">Want to paint something else? <a onClick={() => resetState()}>Reset canvas</a>.</span>}
     </StyledCanvasView>
