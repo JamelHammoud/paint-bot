@@ -1,17 +1,8 @@
-# react-boiler
-React template using functional styled components.
+# Paint
+Paint spawns canvases in Discord so you can paint messages to your friends.
 
-Use `yarn start` to start the development server.
+Using Paint is as simple as 1, 2, 3. 
 
-## Conventions
-
-* All components live within the `components` folder
-  * A component is a reusable 'piece' of the app (ex: button, video player)
-* All views live within the `views` folder
-  * A view typically denotes a page (ex: sign up, register, feed)
-* All types live within the `types` folder
-* Each component is within a folder with the same name as the component (use PascalCase!)
-* Each component folder contains at least three files:
-  * index.ts (used to export the component/styled component)
-  * ComponentName.tsx (used for the actual component)
-  * ComponentName.Styled.tsx (used for the styled component)
+1. Invite Paint to your server ([Invite Link](https://discord.com/api/oauth2/authorize?client_id=1066192909109567489&permissions=296960&scope=bot))
+2. Use the `/paint` command to spawn a Canvas
+3. Open the Canvas, draw your message & press "Send" 
