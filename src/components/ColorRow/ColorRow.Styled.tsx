@@ -57,7 +57,7 @@ const StyledColorRow = styled.div`
       -ms-overflow-style: none;
       scrollbar-width: none;
       padding-top: 5px;
-  
+
       ::-webkit-scrollbar {
         display: none;
       }

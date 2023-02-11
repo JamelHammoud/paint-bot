@@ -1,37 +1,30 @@
 {
-  "name": "react-boiler",
+  "name": "paint-bot-frontend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "yarn env react-scripts start",
-    "build": "yarn env react-scripts build",
+    "dev": "yarn env:dev react-scripts start",
     "env": "dotenv -e .env",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "paint": "tsc && dotenv -e .env node built/src/paint.js"
+    "env:dev": "dotenv -e .env.development",
+    "build": "yarn env react-scripts build"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
-    "@reduxjs/toolkit": "^1.8.2",
-    "cryptr": "^6.1.0",
     "discord.js": "^14.7.1",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-horizontal-scrolling-menu": "^3.2.3",
-    "react-redux": "^8.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-sketch-canvas": "^6.2.0",
-    "redux-persist": "^6.0.0",
     "styled-components": "^5.2.3",
     "typescript": "^4.1.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
     "@types/cryptr": "^4.0.1",
-    "@types/jest": "^26.0.15",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^18.0.0",

@@ -8,11 +8,7 @@ type Props = {
 
 const Button: FC<Props> = ({ isIcon, isActive, children, ...rest }) => {
   return (
-    <StyledButton
-      aria-selected={isActive}
-      isIcon={isIcon}
-      {...rest}
-    >
+    <StyledButton aria-selected={isActive} isIcon={isIcon} {...rest}>
       {children}
     </StyledButton>
   )

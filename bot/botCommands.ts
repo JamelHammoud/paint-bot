@@ -3,8 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { Routes } from 'discord-api-types/v9'
 
 const apiToken = process.env.BOT_KEY!
-const clientId = '1066192909109567489'
-const guildId = '796600091430354974'
+const clientId = process.env.BOT_CLIENT_ID!
 
 const commands = [
 	new SlashCommandBuilder()

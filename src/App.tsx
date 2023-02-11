@@ -1,28 +1,19 @@
 import { FC } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { PersistGate } from 'redux-persist/integration/react'
-import { Provider } from 'react-redux'
 import { Global, ROUTES, theme } from './utils'
-import { persistor, store } from './redux'
-
-import { CanvasView, ExampleView } from './views'
+import { CanvasView } from './views'
 
 const App: FC = () => {
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <ThemeProvider theme={theme}>
-          <Global/>
-          <Router>
-            {/* Routes here */}
-            <Switch>
-              <Route path={ROUTES.App.home} component={CanvasView} exact/>
-            </Switch>
-          </Router>
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Global />
+      <Router>
+        <Switch>
+          <Route path={ROUTES.canvas} component={CanvasView} exact />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   )
 }
 

@@ -2,7 +2,6 @@ import cors from 'cors'
 import express from 'express'
 import Cryptr from 'cryptr'
 import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
-import { sample } from 'lodash'
 
 const bot = new Client({
   intents: [
@@ -24,7 +23,7 @@ const createButton = (interactionId: string, userId: string, channelId: string, 
   return new ActionRowBuilder()
     .addComponents(
       new ButtonBuilder()
-        .setURL(`https://paint-bot.netlify.app?pid=${pid}&cname=${channelName}`)
+        .setURL(`${process.env.APP_URL}?pid=${pid}&cname=${channelName}`)
         .setLabel('Open Canvas')
         .setStyle(ButtonStyle.Link)
     )
@@ -55,10 +54,20 @@ app.listen(PORT, () => {
 })
 
 app.post('/send', (req, res) => {
-  const { image, iid, uid, cid } = req.body
+  const { image, pid } = req.body
 
-  if (!image || !iid || !uid || !cid) {
+  if (!image || !pid) {
     throw new Error ('Invalid parameters')
+  }
+
+  const secret = process.env.SECRET!
+  const cryptr = new Cryptr(secret)
+  const session = cryptr.decrypt(pid)
+
+  const { iid, uid, cid } = JSON.parse(session)
+
+  if (!iid || !uid || !cid) {
+    throw new Error ('Invalid PID')
   }
 
   const channel = bot.channels.cache.get(cid) as any
@@ -69,8 +78,10 @@ app.post('/send', (req, res) => {
 
   const sfbuff = Buffer.from(image.split(',')[1], 'base64')
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
+  const randomWord = specialWords[Math.floor((Math.random() * specialWords.length))]
 
-  channel.send({ content: `<@${uid}> ${sample(specialWords)}:`, files: [attachment] })
+  console.log(`${uid} just ${randomWord}.`)
+  channel.send({ content: `<@${uid}> ${randomWord}:`, files: [attachment] })
 
   res.json({
     status: 'ok'

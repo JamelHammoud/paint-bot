@@ -2,11 +2,7 @@ import { FC } from 'react'
 import { ReactComponent as SpinnerIcon } from './spinner.svg'
 import { StyledSpinner } from '.'
 
-type Props = {
-  isLarge?: boolean
-}
-
-const Spinner: FC<Props> = ({ isLarge }) => {
+const Spinner: FC = () => {
   return (
     <StyledSpinner className="spinner">
       <SpinnerIcon />

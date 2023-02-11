@@ -9,18 +9,13 @@ type Props = {
 
 const sizes = [3, 5, 8, 14, 30]
 
-const SizeRow: FC<Props > = ({ value, onSelect }) => {
+const SizeRow: FC<Props> = ({ value, onSelect }) => {
   return (
     <StyledSizeRow>
-      {sizes.map((size) => {
+      {sizes.map(size => {
         return (
-          <Button
-            isIcon
-            isActive={size === value}
-            onClick={() => onSelect(size)}
-            key={size}
-          >
-            <div/>
+          <Button isIcon isActive={size === value} onClick={() => onSelect(size)} key={size}>
+            <div />
           </Button>
         )
       })}

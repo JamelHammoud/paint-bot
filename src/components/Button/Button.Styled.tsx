@@ -6,7 +6,7 @@ type StyledProps = {
 
 const StyledButton = styled.button<StyledProps>`
   height: 36px;
-  width: ${({ isIcon }) => isIcon ? '36px' : '100%'};
+  width: ${({ isIcon }) => (isIcon ? '36px' : '100%')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +37,7 @@ const StyledButton = styled.button<StyledProps>`
     box-shadow: none;
   }
 
-  &[aria-selected="true"] {
+  &[aria-selected='true'] {
     border-color: ${({ theme }) => theme.color.purple[800]};
     background-color: ${({ theme }) => theme.color.purple[100]};
     color: ${({ theme }) => theme.color.purple[800]};

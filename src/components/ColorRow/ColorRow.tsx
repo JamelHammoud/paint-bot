@@ -4,11 +4,6 @@ import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '@heroicons/react/24
 import { Button } from '..'
 import { StyledColorRow } from '.'
 
-type Props = {
-  value: string
-  onSelect: (value: string) => void
-}
-
 const colors = [
   '#000000',
   '#dc2626',
@@ -27,6 +22,11 @@ const colors = [
   '#f43f5e'
 ]
 
+type Props = {
+  value: string
+  onSelect: (value: string) => void
+}
+
 const ColorRow: FC<Props> = ({ value, onSelect }) => {
   const ArrowLeft = () => {
     const { isFirstItemVisible, initComplete, scrollPrev } = useContext(VisibilityContext)
@@ -37,10 +37,7 @@ const ColorRow: FC<Props> = ({ value, onSelect }) => {
 
     return (
       <div className="arrow-background arrow-left">
-        <button
-          className="arrow-btn"
-          onClick={() => scrollPrev()}
-        >
+        <button className="arrow-btn" onClick={() => scrollPrev()}>
           <ChevronLeftIcon />
         </button>
       </div>
@@ -56,10 +53,7 @@ const ColorRow: FC<Props> = ({ value, onSelect }) => {
 
     return (
       <div className="arrow-background arrow-right">
-        <button
-          className="arrow-btn"
-          onClick={() => scrollNext()}
-        >
+        <button className="arrow-btn" onClick={() => scrollNext()}>
           <ChevronRightIcon />
         </button>
       </div>
@@ -70,26 +64,18 @@ const ColorRow: FC<Props> = ({ value, onSelect }) => {
     <StyledColorRow>
       <div className="color-list">
         <ScrollMenu LeftArrow={<ArrowLeft />} RightArrow={<ArrowRight />}>
-          {colors.map((color) => {
+          {colors.map(color => {
             return (
-              <Button
-                isIcon
-                isActive={color === value}
-                onClick={() => onSelect(color)}
-                key={color}
-              >
-                <div
-                  className="color-preview"
-                  style={{ backgroundColor: color }}
-                />
+              <Button isIcon isActive={color === value} onClick={() => onSelect(color)} key={color}>
+                <div className="color-preview" style={{ backgroundColor: color }} />
               </Button>
             )
           })}
         </ScrollMenu>
       </div>
       <Button className="color-btn" isIcon>
-        <input type="color" value={value} onChange={(e) => onSelect(e.target.value)}/>
-        <PlusIcon/>
+        <input type="color" value={value} onChange={e => onSelect(e.target.value)} />
+        <PlusIcon />
       </Button>
     </StyledColorRow>
   )

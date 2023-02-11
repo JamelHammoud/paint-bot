@@ -1,0 +1,19 @@
+/* Mona Sans */
+
+@font-face {
+  font-family: 'Mona-Sans';
+  font-weight: 400;
+  src: url('./mona-sans/Mona-Sans-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  font-weight: 500;
+  src: url('./mona-sans/Mona-Sans-Medium.ttf');
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  font-weight: 600;
+  src: url('./mona-sans/Mona-Sans-SemiBold.ttf');
+}

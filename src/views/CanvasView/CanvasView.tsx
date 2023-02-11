@@ -1,13 +1,13 @@
-import Cryptr from 'cryptr'
+import debounce from 'lodash.debounce'
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useLocation } from 'react-router-dom'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { ReactComponent as EraserIcon } from '../../assets/eraser-icon.svg'
 import { Button, ColorRow, SizeRow, Spinner } from '../../components'
 import { StyledCanvasView } from '.'
 
 const CanvasView: FC = () => {
-  const cryptr = new Cryptr(process.env.REACT_APP_SECRET!)
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
   const [loading, setLoading] = useState(false)
@@ -63,16 +63,14 @@ const CanvasView: FC = () => {
         return
       }
 
-      const decryptedString = cryptr.decrypt(params.pid)
-      const session = JSON.parse(decryptedString)
       const image = await canvas.current?.exportImage('png')
 
       const body = {
         image,
-        ...session
+        pid: params.pid
       }
 
-      await fetch('https://paint-bot.up.railway.app/send', {
+      await fetch(process.env.REACT_APP_SERVER_URL!, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -82,14 +80,16 @@ const CanvasView: FC = () => {
 
       window.close()
       setSent(true)
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
-    }
-    finally {
+    } finally {
       setLoading(false)
     }
   }
+
+  const handleColor = debounce((color: string) => {
+    setColor(color)
+  }, 100)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
@@ -98,61 +98,63 @@ const CanvasView: FC = () => {
   }, [location.search])
 
   useEffect(() => {
-    document.addEventListener('keydown', (e) => handleKeyDown(e))
+    document.addEventListener('keydown', e => handleKeyDown(e))
 
     return () => {
-      document.removeEventListener('keydown', (e) => handleKeyDown(e))
+      document.removeEventListener('keydown', e => handleKeyDown(e))
     }
   }, [])
 
   return (
-    <StyledCanvasView mode={mode} sent={sent}>
+    <StyledCanvasView mode={mode} color={color.replace('#', '')} size={size} sent={sent}>
       <div className="canvas-header">
         <div className="canvas-logo">
-          <img src="/paint-icon.png" alt="Paint Logo"/>
+          <img src="/paint-icon.png" alt="Paint Logo" />
           <h1>Paint</h1>
         </div>
         <div className="canvas-header-actions">
           <Button isIcon onClick={() => undo()}>
-            <ArrowUturnLeftIcon/>
+            <ArrowUturnLeftIcon />
           </Button>
           <Button isIcon onClick={() => redo()}>
-            <ArrowUturnRightIcon/>
+            <ArrowUturnRightIcon />
           </Button>
         </div>
       </div>
       <div className="canvas-container">
-        <ReactSketchCanvas
-          className="canvas"
-          strokeWidth={size}
-          eraserWidth={size}
-          strokeColor={color}
-          ref={canvas}
-        />
+        <ReactSketchCanvas className="canvas" strokeWidth={size} eraserWidth={size} strokeColor={color} ref={canvas} />
       </div>
       <div className="canvas-actions">
         <div className="canvas-actions-group">
           <div className="canvas-actions-group canvas-tools">
             <Button isIcon isActive={mode === 'pencil'} onClick={() => switchMode('pencil')}>
-              <PencilIcon/>
+              <PencilIcon />
             </Button>
             <Button isIcon isActive={mode === 'eraser'} onClick={() => switchMode('eraser')}>
-              Er
+              <EraserIcon />
             </Button>
             <Button className="clear-btn" isIcon onClick={() => clear()}>
-              <TrashIcon/>
+              <TrashIcon />
             </Button>
           </div>
         </div>
-        <SizeRow value={size} onSelect={(size) => setSize(size)} />
+        <SizeRow value={size} onSelect={size => setSize(size)} />
       </div>
-      <ColorRow value={color} onSelect={(color) => setColor(color)} />
+      <ColorRow value={color} onSelect={color => handleColor(color)} />
       <Button className="send-button" disabled={sent || loading} onClick={() => sendMessage()}>
         {!sent && !loading && `Send in #${channelName}`}
-        {sent && !loading && <><CheckIcon className="check-icon"/> Painting sent</>}
-        {loading && <Spinner/>}
+        {sent && !loading && (
+          <>
+            <CheckIcon className="check-icon" /> Painting sent
+          </>
+        )}
+        {loading && <Spinner />}
       </Button>
-      {sent && <span className="try-another-message">Want to paint something else? <a onClick={() => resetState()}>Reset canvas</a>.</span>}
+      {sent && (
+        <span className="try-another-message">
+          Want to paint something else? <a onClick={() => resetState()}>Reset canvas</a>.
+        </span>
+      )}
     </StyledCanvasView>
   )
 }

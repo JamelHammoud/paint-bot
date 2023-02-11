@@ -44,7 +44,7 @@ const StyledSizeRow = styled.div`
       }
     }
 
-    &[aria-selected="true"] {
+    &[aria-selected='true'] {
       div {
         background-color: ${({ theme }) => theme.color.purple[800]};
       }
