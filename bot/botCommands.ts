@@ -5,21 +5,18 @@ import { Routes } from 'discord-api-types/v9'
 const apiToken = process.env.BOT_KEY!
 const clientId = process.env.BOT_CLIENT_ID!
 
-const commands = [
-	new SlashCommandBuilder()
-  .setName('paint')
-  .setDescription('Spawns a canvas')
-].map((command) => command.toJSON())
+const commands = [new SlashCommandBuilder().setName('paint').setDescription('Spawns a canvas')].map(command =>
+  command.toJSON()
+)
 
 const deploy = async () => {
   try {
     const rest = new REST({ version: '9' }).setToken(apiToken)
     await rest.put(Routes.applicationCommands(clientId) as any, { body: commands })
-    
+
     console.log('Deployed Bot commands')
-  }
-  catch (err: any) {
-    console.log('There was an error!', err.message)
+  } catch (err) {
+    console.error('There was an error!', (err as any).message)
   }
 }
 

@@ -4,10 +4,7 @@ import Cryptr from 'cryptr'
 import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
 
 const bot = new Client({
-  intents: [
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMessages
-  ]
+  intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages]
 })
 
 const createButton = (interactionId: string, userId: string, channelId: string, channelName: string) => {
@@ -20,13 +17,12 @@ const createButton = (interactionId: string, userId: string, channelId: string, 
   }
   const pid = cryptr.encrypt(JSON.stringify(object))
 
-  return new ActionRowBuilder()
-    .addComponents(
-      new ButtonBuilder()
-        .setURL(`${process.env.APP_URL}?pid=${pid}&cname=${channelName}`)
-        .setLabel('Open Canvas')
-        .setStyle(ButtonStyle.Link)
-    )
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setURL(`${process.env.APP_URL}?pid=${pid}&cname=${channelName}`)
+      .setLabel('Open Canvas')
+      .setStyle(ButtonStyle.Link)
+  )
 }
 
 const app = express()
@@ -57,7 +53,7 @@ app.post('/send', (req, res) => {
   const { image, pid } = req.body
 
   if (!image || !pid) {
-    throw new Error ('Invalid parameters')
+    throw new Error('Invalid parameters')
   }
 
   const secret = process.env.SECRET!
@@ -67,20 +63,20 @@ app.post('/send', (req, res) => {
   const { iid, uid, cid } = JSON.parse(session)
 
   if (!iid || !uid || !cid) {
-    throw new Error ('Invalid PID')
+    throw new Error('Invalid PID')
   }
 
   const channel = bot.channels.cache.get(cid) as any
 
   if (!channel) {
-    throw new Error ('Could not find channel')
+    throw new Error('Could not find channel')
   }
 
   const sfbuff = Buffer.from(image.split(',')[1], 'base64')
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
-  const randomWord = specialWords[Math.floor((Math.random() * specialWords.length))]
+  const randomWord = specialWords[Math.floor(Math.random() * specialWords.length)]
 
-  console.log(`${uid} just ${randomWord}.`)
+  console.log(`${uid} just ${randomWord} in ${channel.name}.`)
   channel.send({ content: `<@${uid}> ${randomWord}:`, files: [attachment] })
 
   res.json({
@@ -88,7 +84,7 @@ app.post('/send', (req, res) => {
   })
 })
 
-bot.on('interactionCreate', async (interaction) => {
+bot.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) {
     return
   }
@@ -98,7 +94,7 @@ bot.on('interactionCreate', async (interaction) => {
   if (commandName !== 'paint') {
     return
   }
-  
+
   const button = createButton(interaction.id, user.id, channelId, (channel as any).name)
 
   await interaction.reply({
