@@ -36,6 +36,7 @@ const StyledColorRow = styled.div`
 
     input {
       position: absolute;
+      cursor: pointer;
       top: 0;
       left: 0;
       right: 0;
