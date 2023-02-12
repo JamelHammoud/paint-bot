@@ -1,3 +1,19 @@
+/* Cascadia */
+
+@font-face {
+  font-family: 'Cascadia';
+  font-weight: 400;
+  src: url('./cascadia/Cascadia.ttf');
+}
+
+/* Gooddog */
+
+@font-face {
+  font-family: 'Gooddog';
+  font-weight: 400;
+  src: url('./gooddog/gooddog.otf');
+}
+
 /* Mona Sans */
 
 @font-face {
