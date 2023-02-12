@@ -10,6 +10,7 @@
     "build": "yarn env react-scripts build"
   },
   "dependencies": {
+    "@babel/runtime": "^7.20.13",
     "@heroicons/react": "^2.0.13",
     "discord.js": "^14.7.1",
     "lodash.debounce": "^4.0.8",
