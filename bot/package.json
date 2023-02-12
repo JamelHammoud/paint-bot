@@ -6,7 +6,9 @@
     "bot": "tsc && dotenv -e .env node built/bot.js",
     "dev": "tsc && dotenv -e .env.development node built/bot.js",
     "commands": "tsc && dotenv -e .env node built/botCommands.js",
-    "commands:dev": "tsc && dotenv -e .env.development node built/botCommands.js"
+    "commands:dev": "tsc && dotenv -e .env.development node built/botCommands.js",
+    "guilds": "tsc && dotenv -e .env node built/botGuilds.js",
+    "guilds:dev": "tsc && dotenv -e .env.development node built/botGuilds.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
