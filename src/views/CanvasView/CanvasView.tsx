@@ -1,15 +1,17 @@
 import debounce from 'lodash.debounce'
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { ReactComponent as EraserIcon } from '../../assets/eraser-icon.svg'
 import { Button, ColorRow, SizeRow, Spinner } from '../../components'
+import { ROUTES } from '../../utils'
 import { StyledCanvasView } from '.'
 
 const CanvasView: FC = () => {
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
+  const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [size, setSize] = useState(5)
@@ -94,6 +96,12 @@ const CanvasView: FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
     const params = Object.fromEntries(urlParams)
+
+    if (!params?.pid) {
+      history.push(ROUTES.about)
+      return
+    }
+
     setChannelName(params?.cname || 'general')
   }, [location.search])
 
