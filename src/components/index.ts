@@ -1,4 +1,5 @@
 export { Button } from './Button'
 export { ColorRow } from './ColorRow'
+export { PageLayout } from './PageLayout'
 export { SizeRow } from './SizeRow'
 export { Spinner } from './Spinner'
