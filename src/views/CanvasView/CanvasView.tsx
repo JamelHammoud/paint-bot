@@ -81,7 +81,7 @@ const CanvasView: FC = () => {
         body: JSON.stringify(body)
       })
 
-      // window.close()
+      window.close()
       setSent(true)
     } catch (err) {
       console.error(err)
