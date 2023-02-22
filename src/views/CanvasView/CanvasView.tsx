@@ -2,6 +2,7 @@ import debounce from 'lodash.debounce'
 import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useHistory, useLocation } from 'react-router-dom'
+import { deflate } from 'pako'
 import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { ReactComponent as EraserIcon } from '../../assets/eraser-icon.svg'
 import { Button, ColorRow, SizeRow, Spinner } from '../../components'
@@ -68,7 +69,7 @@ const CanvasView: FC = () => {
       const image = await canvas.current?.exportImage('png')
 
       const body = {
-        image,
+        image: deflate(image || ''),
         pid: params.pid
       }
 
@@ -80,7 +81,7 @@ const CanvasView: FC = () => {
         body: JSON.stringify(body)
       })
 
-      window.close()
+      // window.close()
       setSent(true)
     } catch (err) {
       console.error(err)

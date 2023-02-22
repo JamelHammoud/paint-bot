@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import Cryptr from 'cryptr'
+import { inflate } from 'pako'
 import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
 
 const bot = new Client({
@@ -29,8 +30,8 @@ const app = express()
 const PORT = 52635
 
 app.use(cors({ origin: '*' }))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true, limit: '50mb' }))
+app.use(express.json({ limit: '50mb' }))
 
 const specialWords = [
   'drew',
@@ -72,7 +73,8 @@ app.post('/send', (req, res) => {
     throw new Error('Could not find channel')
   }
 
-  const sfbuff = Buffer.from(image.split(',')[1], 'base64')
+  const uncompressed = inflate(image, { to: 'string' })
+  const sfbuff = Buffer.from(uncompressed.split(',')[1], 'base64')
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
   const randomWord = specialWords[Math.floor(Math.random() * specialWords.length)]
 
