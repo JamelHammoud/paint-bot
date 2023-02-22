@@ -2,7 +2,16 @@ import cors from 'cors'
 import express from 'express'
 import Cryptr from 'cryptr'
 import { inflate } from 'pako'
-import { Client, IntentsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js'
+import {
+  Client,
+  IntentsBitField,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  AttachmentBuilder,
+  TextChannel,
+  Guild
+} from 'discord.js'
 
 const bot = new Client({
   intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages]
@@ -67,7 +76,8 @@ app.post('/send', (req, res) => {
     throw new Error('Invalid PID')
   }
 
-  const channel = bot.channels.cache.get(cid) as any
+  const channel = bot.channels.cache.get(cid) as TextChannel
+  const guild = bot.guilds.cache.get(channel.guildId) as Guild
 
   if (!channel) {
     throw new Error('Could not find channel')
@@ -78,7 +88,7 @@ app.post('/send', (req, res) => {
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
   const randomWord = specialWords[Math.floor(Math.random() * specialWords.length)]
 
-  console.log(`${uid} just ${randomWord} in ${channel.name}.`)
+  console.log(`${uid} just ${randomWord} in #${channel?.name} (${guild?.name}) at ${new Date().toLocaleString()}.`)
   channel.send({ content: `<@${uid}> ${randomWord}:`, files: [attachment] })
 
   res.json({
