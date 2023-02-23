@@ -3,30 +3,30 @@ import { createRef, FC, useEffect, useState } from 'react'
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { useHistory, useLocation } from 'react-router-dom'
 import { deflate } from 'pako'
-import { ArrowUturnLeftIcon, ArrowUturnRightIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { ReactComponent as EraserIcon } from '../../assets/eraser-icon.svg'
-import { Button, ColorRow, SizeRow, Spinner } from '../../components'
+import { Button, CanvasHeader, ColorRow, OptionsPopover, SizeRow, Spinner } from '../../components'
 import { ROUTES } from '../../utils'
+import {
+  setCanvasColor,
+  setCanvasLoading,
+  setCanvasMode,
+  setCanvasPenSize,
+  setCanvasSent,
+  useAppDispatch,
+  useAppSelector
+} from '../../redux'
 import { StyledCanvasView } from '.'
 
 const CanvasView: FC = () => {
   const canvas = createRef<ReactSketchCanvasRef>()
   const location = useLocation()
   const history = useHistory()
-  const [loading, setLoading] = useState(false)
-  const [sent, setSent] = useState(false)
-  const [size, setSize] = useState(5)
-  const [mode, setMode] = useState<'pencil' | 'eraser'>('pencil')
-  const [color, setColor] = useState('#000000')
+  const dispatch = useAppDispatch()
+  const { color, mode, penSize, loading, sent, showBackground } = useAppSelector(
+    state => state.canvas
+  )
   const [channelName, setChannelName] = useState('general')
-
-  const undo = () => {
-    canvas.current?.undo()
-  }
-
-  const redo = () => {
-    canvas.current?.redo()
-  }
 
   const clear = () => {
     canvas.current?.clearCanvas()
@@ -34,30 +34,21 @@ const CanvasView: FC = () => {
 
   const switchMode = (modeToSwitch: typeof mode) => {
     const isEraseMode = modeToSwitch === 'eraser' ? true : false
-    setMode(modeToSwitch)
+    dispatch(setCanvasMode(modeToSwitch))
     canvas.current?.eraseMode(isEraseMode)
   }
 
   const resetState = () => {
-    setSent(false)
+    dispatch(setCanvasSent(false))
+    dispatch(setCanvasPenSize(5))
+    dispatch(setCanvasColor('#000000'))
     switchMode('pencil')
-    setSize(5)
-    setColor('#000000')
     canvas.current?.resetCanvas()
-  }
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.shiftKey && e.metaKey && e.key === 'z') {
-      return redo()
-    }
-    if (e.metaKey && e.key === 'z') {
-      return undo()
-    }
   }
 
   const sendMessage = async () => {
     try {
-      setLoading(true)
+      dispatch(setCanvasLoading(true))
 
       const urlParams = new URLSearchParams(location.search)
       const params = Object.fromEntries(urlParams)
@@ -82,16 +73,17 @@ const CanvasView: FC = () => {
       })
 
       window.close()
-      setSent(true)
+      dispatch(setCanvasSent(true))
     } catch (err) {
       console.error(err)
     } finally {
-      setLoading(false)
+      dispatch(setCanvasLoading(false))
     }
   }
 
   const handleColor = debounce((color: string) => {
-    setColor(color)
+    dispatch(setCanvasColor(color))
+    dispatch(setCanvasMode('pencil'))
   }, 100)
 
   useEffect(() => {
@@ -106,32 +98,19 @@ const CanvasView: FC = () => {
     setChannelName(params?.cname || 'general')
   }, [location.search])
 
-  useEffect(() => {
-    document.addEventListener('keydown', e => handleKeyDown(e))
-
-    return () => {
-      document.removeEventListener('keydown', e => handleKeyDown(e))
-    }
-  }, [])
-
   return (
-    <StyledCanvasView mode={mode} color={color.replace('#', '')} size={size} sent={sent}>
-      <div className="canvas-header">
-        <div className="canvas-logo">
-          <img src="/paint-icon.png" alt="Paint Logo" />
-          <h1>Paint</h1>
-        </div>
-        <div className="canvas-header-actions">
-          <Button isIcon onClick={() => undo()}>
-            <ArrowUturnLeftIcon />
-          </Button>
-          <Button isIcon onClick={() => redo()}>
-            <ArrowUturnRightIcon />
-          </Button>
-        </div>
-      </div>
+    <StyledCanvasView mode={mode} color={color.replace('#', '')} size={penSize} sent={sent}>
+      <CanvasHeader canvas={canvas} />
       <div className="canvas-container">
-        <ReactSketchCanvas className="canvas" strokeWidth={size} eraserWidth={size} strokeColor={color} ref={canvas} />
+        <ReactSketchCanvas
+          className="canvas"
+          backgroundImage={showBackground ? undefined : '/grid.png'}
+          strokeWidth={penSize}
+          eraserWidth={penSize}
+          strokeColor={color}
+          exportWithBackgroundImage={false}
+          ref={canvas}
+        />
       </div>
       <div className="canvas-actions">
         <div className="canvas-actions-group">
@@ -147,7 +126,7 @@ const CanvasView: FC = () => {
             </Button>
           </div>
         </div>
-        <SizeRow value={size} onSelect={size => setSize(size)} />
+        <SizeRow />
       </div>
       <ColorRow value={color} onSelect={color => handleColor(color)} />
       <Button className="send-button" disabled={sent || loading} onClick={() => sendMessage()}>
@@ -164,6 +143,7 @@ const CanvasView: FC = () => {
           Want to paint something else? <a onClick={() => resetState()}>Reset canvas</a>.
         </span>
       )}
+      <OptionsPopover canvas={canvas} />
     </StyledCanvasView>
   )
 }

@@ -22,32 +22,6 @@ const StyledCanvasView = styled.div<StyledProps>`
     user-select: none;
   }
 
-  .canvas-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-
-    .canvas-logo {
-      display: flex;
-      align-items: center;
-
-      img {
-        height: 36px;
-        width: 36px;
-        margin: 0 2px 0 -6px;
-      }
-
-      h1 {
-        font-size: 26px;
-      }
-    }
-
-    .canvas-header-actions {
-      display: flex;
-    }
-  }
-
   .canvas-container {
     padding-top: 100%;
     position: relative;
@@ -64,6 +38,24 @@ const StyledCanvasView = styled.div<StyledProps>`
       left: 0;
       right: 0;
       bottom: 0;
+      background-position: 0 0, 10px 10px;
+      background-size: 21px 21px;
+      background-image: linear-gradient(
+          45deg,
+          ${({ theme }) => theme.color.gray[200]} 25%,
+          rgba(239, 239, 239, 0) 25%,
+          rgba(239, 239, 239, 0) 75%,
+          ${({ theme }) => theme.color.gray[200]} 75%,
+          ${({ theme }) => theme.color.gray[200]}
+        ),
+        linear-gradient(
+          45deg,
+          ${({ theme }) => theme.color.gray[200]} 25%,
+          rgba(239, 239, 239, 0) 25%,
+          rgba(239, 239, 239, 0) 75%,
+          ${({ theme }) => theme.color.gray[200]} 75%,
+          ${({ theme }) => theme.color.gray[200]}
+        );
 
       ${({ mode, color }) =>
         mode === 'pencil' &&
@@ -76,10 +68,9 @@ const StyledCanvasView = styled.div<StyledProps>`
       ${({ mode, size }) =>
         mode === 'eraser' &&
         `
-        cursor: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0n${btoa(`${Math.max(10, size * 2)}`).replaceAll(
-          '=',
-          ''
-        )}nIGhlaWdodD0n${btoa(`${Math.max(10, size * 2)}`).replaceAll(
+        cursor: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0n${btoa(
+          `${Math.max(10, size * 2)}`
+        ).replaceAll('=', '')}nIGhlaWdodD0n${btoa(`${Math.max(10, size * 2)}`).replaceAll(
           '=',
           ''
         )}nIHZpZXdCb3g9JzAgMCAzMiAzMicgZmlsbD0nbm9uZScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48ZyBmaWx0ZXI9J3VybCgjZmlsdGVyMF9kXzZfMzMpJz48Y2lyY2xlIGN4PScxNicgY3k9JzE2JyByPScxMS41JyBzdHJva2U9J3doaXRlJy8+PGNpcmNsZSBjeD0nMTYnIGN5PScxNicgcj0nMTAnIHN0cm9rZT0nYmxhY2snIHN0cm9rZS13aWR0aD0nMicvPjwvZz48ZGVmcz48ZmlsdGVyIGlkPSdmaWx0ZXIwX2RfNl8zMycgeD0nLTInIHk9Jy0xJyB3aWR0aD0nMzYnIGhlaWdodD0nMzYnIGZpbHRlclVuaXRzPSd1c2VyU3BhY2VPblVzZScgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSdzUkdCJz48ZmVGbG9vZCBmbG9vZC1vcGFjaXR5PScwJyByZXN1bHQ9J0JhY2tncm91bmRJbWFnZUZpeCcvPjxmZUNvbG9yTWF0cml4IGluPSdTb3VyY2VBbHBoYScgdHlwZT0nbWF0cml4JyB2YWx1ZXM9JzAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDEyNyAwJyByZXN1bHQ9J2hhcmRBbHBoYScvPjxmZU9mZnNldCBkeT0nMScvPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249JzEnLz48ZmVDb21wb3NpdGUgaW4yPSdoYXJkQWxwaGEnIG9wZXJhdG9yPSdvdXQnLz48ZmVDb2xvck1hdHJpeCB0eXBlPSdtYXRyaXgnIHZhbHVlcz0nMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMC4yNSAwJy8+PGZlQmxlbmQgbW9kZT0nbm9ybWFsJyBpbjI9J0JhY2tncm91bmRJbWFnZUZpeCcgcmVzdWx0PSdlZmZlY3QxX2Ryb3BTaGFkb3dfNl8zMycvPjxmZUJsZW5kIG1vZGU9J25vcm1hbCcgaW49J1NvdXJjZUdyYXBoaWMnIGluMj0nZWZmZWN0MV9kcm9wU2hhZG93XzZfMzMnIHJlc3VsdD0nc2hhcGUnLz48L2ZpbHRlcj48L2RlZnM+PC9zdmc+Cg==") ${Math.max(

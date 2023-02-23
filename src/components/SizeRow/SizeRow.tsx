@@ -1,20 +1,24 @@
 import { FC } from 'react'
+import { setCanvasPenSize, useAppDispatch, useAppSelector } from '../../redux'
 import { Button } from '..'
 import { StyledSizeRow } from '.'
 
-type Props = {
-  value: number
-  onSelect: (value: number) => void
-}
-
 const sizes = [3, 5, 8, 14, 30]
 
-const SizeRow: FC<Props> = ({ value, onSelect }) => {
+const SizeRow: FC = () => {
+  const dispatch = useAppDispatch()
+  const { penSize: value } = useAppSelector(state => state.canvas)
+
   return (
     <StyledSizeRow>
       {sizes.map(size => {
         return (
-          <Button isIcon isActive={size === value} onClick={() => onSelect(size)} key={size}>
+          <Button
+            isIcon
+            isActive={size === value}
+            onClick={() => dispatch(setCanvasPenSize(size))}
+            key={size}
+          >
             <div />
           </Button>
         )
