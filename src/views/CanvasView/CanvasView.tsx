@@ -24,9 +24,16 @@ const CanvasView: FC = () => {
   const location = useLocation()
   const history = useHistory()
   const dispatch = useAppDispatch()
-  const { color, message, mode, penSize, loading, sent, showBackground } = useAppSelector(
-    state => state.canvas
-  )
+  const {
+    color,
+    message,
+    mode,
+    penSize,
+    loading,
+    sent,
+    showBackground,
+    closeOnSend
+  } = useAppSelector(state => state.canvas)
   const [channelName, setChannelName] = useState('general')
 
   const clear = () => {
@@ -75,8 +82,11 @@ const CanvasView: FC = () => {
         body: JSON.stringify(body)
       })
 
-      window.close()
       dispatch(setCanvasSent(true))
+
+      if (closeOnSend) {
+        window.close()
+      }
     } catch (err) {
       console.error(err)
     } finally {

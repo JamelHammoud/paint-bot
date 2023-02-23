@@ -2,6 +2,7 @@ import { FC, RefObject } from 'react'
 import { ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { saveAs } from 'file-saver'
 import {
+  setCanvasCloseOnSend,
   setCanvasMessage,
   setCanvasShowBackground,
   useAppDispatch,
@@ -16,7 +17,7 @@ type Props = {
 
 const OptionsPopoverForm: FC<Props> = ({ canvas }) => {
   const dispatch = useAppDispatch()
-  const { message, showBackground } = useAppSelector(state => state.canvas)
+  const { message, showBackground, closeOnSend } = useAppSelector(state => state.canvas)
 
   const handleDownload = async () => {
     const image = await canvas?.current?.exportImage('png')
@@ -31,6 +32,13 @@ const OptionsPopoverForm: FC<Props> = ({ canvas }) => {
           onChange={e => dispatch(setCanvasShowBackground(e.target.checked ? false : true))}
         />
         <span>Transparent background</span>
+      </label>
+      <label className="options-popover-row">
+        <Checkbox
+          checked={closeOnSend}
+          onChange={e => dispatch(setCanvasCloseOnSend(e.target.checked ? true : false))}
+        />
+        <span>Close window on send</span>
       </label>
       <label className="options-popover-row">
         <textarea

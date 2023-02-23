@@ -6,6 +6,7 @@ type InitialState = {
   color: string
   message: string
   showBackground?: boolean
+  closeOnSend?: boolean
   sent?: boolean
   loading?: boolean
   showOptions?: boolean
@@ -17,6 +18,7 @@ const initialState: InitialState = {
   color: '#000000',
   message: '',
   showBackground: true,
+  closeOnSend: true,
   sent: false,
   loading: false,
   showOptions: false
@@ -41,6 +43,9 @@ export const canvasSlice = createSlice({
     setCanvasShowBackground: (state, action: PayloadAction<InitialState['showBackground']>) => {
       state.showBackground = action.payload
     },
+    setCanvasCloseOnSend: (state, action: PayloadAction<InitialState['closeOnSend']>) => {
+      state.closeOnSend = action.payload
+    },
     setCanvasSent: (state, action: PayloadAction<InitialState['sent']>) => {
       state.sent = action.payload
     },
@@ -61,6 +66,7 @@ export const {
   setCanvasPenSize,
   setCanvasSent,
   setCanvasShowBackground,
+  setCanvasCloseOnSend,
   setCanvasShowOptions
 } = canvasSlice.actions
 
