@@ -23,7 +23,8 @@ const StyledOptionsPopoverForm = styled.div`
       resize: vertical;
       width: 100%;
       box-sizing: border-box;
-      padding: 16px;
+      padding: 14px 16px;
+      line-height: 21px;
       border: 2px solid ${({ theme }) => theme.color.gray[900]};
       border-radius: 6px;
       min-height: 200px;
