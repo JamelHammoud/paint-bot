@@ -2984,6 +2984,13 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/redux-persist-transform-filter@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@types/redux-persist-transform-filter/-/redux-persist-transform-filter-0.0.15.tgz#9d6ffce6f34f8ed254b74bd1cebc9448029c41c5"
+  integrity sha512-lV9LIvmKkUrLNVgVWTdlrJ7Q8TBimPkrbQhjtOX8CSEbL0PoLW38+xZhk3pq4afZK5hijAKY4BacftxszrTB3w==
+  dependencies:
+    redux-persist-transform-filter "*"
+
 "@types/resolve@1.17.1":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"
@@ -9051,6 +9058,13 @@ recursive-readdir@^2.2.2:
   integrity sha512-8HrF5ZsXk5FAH9dgsx3BlUer73nIhuj+9OrQwEbLTPOBzGkL1lsFCR01am+v+0m2Cmbs1nP12hLDl5FA7EszKA==
   dependencies:
     minimatch "^3.0.5"
+
+redux-persist-transform-filter@*, redux-persist-transform-filter@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/redux-persist-transform-filter/-/redux-persist-transform-filter-0.0.22.tgz#181480570a43b5061389991fc43ca52c6d114318"
+  integrity sha512-XtGN7UQ8w7b3qaxQfdYY1UmuYULqIIemD47IWxIyM8AOF48I6C74m9XxA7gQoC2nIi+rz4URi9Mye4fIbHhZPQ==
+  dependencies:
+    lodash "^4.17.21"
 
 redux-persist@^6.0.0:
   version "6.0.0"
