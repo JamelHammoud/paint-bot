@@ -83,7 +83,7 @@ const CanvasView: FC = () => {
 
   const handleColor = debounce((color: string) => {
     dispatch(setCanvasColor(color))
-    dispatch(setCanvasMode('pencil'))
+    switchMode('pencil')
   }, 100)
 
   useEffect(() => {
