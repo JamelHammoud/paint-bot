@@ -96,7 +96,7 @@ app.post('/send', (req, res) => {
 
   console.log(`${uid} just ${word} in #${channel?.name} (${guild?.name}) at ${date}. ${message}`)
   channel.send({
-    content: `${message?.trim() ? `From <@${uid}>: ${message}` : `<@${uid}> ${word}:`}`,
+    content: `<@${uid}> ${word}:${message?.trim() ? `\n> ${message}` : ''}`,
     files: [attachment]
   })
 
