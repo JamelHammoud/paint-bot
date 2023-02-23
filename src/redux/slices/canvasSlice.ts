@@ -4,6 +4,7 @@ type InitialState = {
   penSize: number
   mode: 'pencil' | 'eraser'
   color: string
+  message: string
   showBackground?: boolean
   sent?: boolean
   loading?: boolean
@@ -14,6 +15,7 @@ const initialState: InitialState = {
   penSize: 5,
   mode: 'pencil',
   color: '#000000',
+  message: '',
   showBackground: true,
   sent: false,
   loading: false,
@@ -33,6 +35,9 @@ export const canvasSlice = createSlice({
     setCanvasColor: (state, action: PayloadAction<InitialState['color']>) => {
       state.color = action.payload
     },
+    setCanvasMessage: (state, action: PayloadAction<InitialState['message']>) => {
+      state.message = action.payload
+    },
     setCanvasShowBackground: (state, action: PayloadAction<InitialState['showBackground']>) => {
       state.showBackground = action.payload
     },
@@ -50,6 +55,7 @@ export const canvasSlice = createSlice({
 
 export const {
   setCanvasColor,
+  setCanvasMessage,
   setCanvasLoading,
   setCanvasMode,
   setCanvasPenSize,

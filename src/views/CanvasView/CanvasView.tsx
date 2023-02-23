@@ -10,6 +10,7 @@ import { ROUTES } from '../../utils'
 import {
   setCanvasColor,
   setCanvasLoading,
+  setCanvasMessage,
   setCanvasMode,
   setCanvasPenSize,
   setCanvasSent,
@@ -23,7 +24,7 @@ const CanvasView: FC = () => {
   const location = useLocation()
   const history = useHistory()
   const dispatch = useAppDispatch()
-  const { color, mode, penSize, loading, sent, showBackground } = useAppSelector(
+  const { color, message, mode, penSize, loading, sent, showBackground } = useAppSelector(
     state => state.canvas
   )
   const [channelName, setChannelName] = useState('general')
@@ -42,6 +43,7 @@ const CanvasView: FC = () => {
     dispatch(setCanvasSent(false))
     dispatch(setCanvasPenSize(5))
     dispatch(setCanvasColor('#000000'))
+    dispatch(setCanvasMessage(''))
     switchMode('pencil')
     canvas.current?.resetCanvas()
   }
@@ -61,7 +63,8 @@ const CanvasView: FC = () => {
 
       const body = {
         image: deflate(image || ''),
-        pid: params.pid
+        pid: params.pid,
+        message
       }
 
       await fetch(process.env.REACT_APP_SERVER_URL!, {

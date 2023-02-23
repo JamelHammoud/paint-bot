@@ -18,6 +18,21 @@ const StyledOptionsPopoverForm = styled.div`
     span {
       margin-left: 10px;
     }
+
+    textarea {
+      resize: vertical;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px;
+      border: 2px solid ${({ theme }) => theme.color.gray[900]};
+      border-radius: 6px;
+      min-height: 200px;
+      max-height: 300px;
+
+      &::placeholder {
+        color: ${({ theme }) => theme.color.gray[400]};
+      }
+    }
   }
 `
 

@@ -17,7 +17,12 @@ const bot = new Client({
   intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMessages]
 })
 
-const createButton = (interactionId: string, userId: string, channelId: string, channelName: string) => {
+const createButton = (
+  interactionId: string,
+  userId: string,
+  channelId: string,
+  channelName: string
+) => {
   const secret = process.env.SECRET!
   const cryptr = new Cryptr(secret)
   const object = {
@@ -60,7 +65,7 @@ app.listen(PORT, () => {
 })
 
 app.post('/send', (req, res) => {
-  const { image, pid } = req.body
+  const { image, pid, message } = req.body
 
   if (!image || !pid) {
     throw new Error('Invalid parameters')
@@ -86,10 +91,14 @@ app.post('/send', (req, res) => {
   const uncompressed = inflate(image, { to: 'string' })
   const sfbuff = Buffer.from(uncompressed.split(',')[1], 'base64')
   const attachment = new AttachmentBuilder(sfbuff, { name: 'canvas.png' })
-  const randomWord = specialWords[Math.floor(Math.random() * specialWords.length)]
+  const word = specialWords[Math.floor(Math.random() * specialWords.length)]
+  const date = new Date().toLocaleString()
 
-  console.log(`${uid} just ${randomWord} in #${channel?.name} (${guild?.name}) at ${new Date().toLocaleString()}.`)
-  channel.send({ content: `<@${uid}> ${randomWord}:`, files: [attachment] })
+  console.log(`${uid} just ${word} in #${channel?.name} (${guild?.name}) at ${date}. ${message}`)
+  channel.send({
+    content: `${message?.trim() ? `From <@${uid}>: ${message}` : `<@${uid}> ${word}:`}`,
+    files: [attachment]
+  })
 
   res.json({
     status: 'ok'

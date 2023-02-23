@@ -1,7 +1,12 @@
 import { FC, RefObject } from 'react'
 import { ReactSketchCanvasRef } from 'react-sketch-canvas'
 import { saveAs } from 'file-saver'
-import { setCanvasShowBackground, useAppDispatch, useAppSelector } from '../../../redux'
+import {
+  setCanvasMessage,
+  setCanvasShowBackground,
+  useAppDispatch,
+  useAppSelector
+} from '../../../redux'
 import { Button, Checkbox } from '../..'
 import { StyledOptionsPopoverForm } from '.'
 
@@ -11,7 +16,7 @@ type Props = {
 
 const OptionsPopoverForm: FC<Props> = ({ canvas }) => {
   const dispatch = useAppDispatch()
-  const { showBackground } = useAppSelector(state => state.canvas)
+  const { message, showBackground } = useAppSelector(state => state.canvas)
 
   const handleDownload = async () => {
     const image = await canvas?.current?.exportImage('png')
@@ -26,6 +31,14 @@ const OptionsPopoverForm: FC<Props> = ({ canvas }) => {
           onChange={e => dispatch(setCanvasShowBackground(e.target.checked ? false : true))}
         />
         <span>Transparent background</span>
+      </label>
+      <label className="options-popover-row">
+        <textarea
+          value={message}
+          placeholder="Attach a message..."
+          maxLength={300}
+          onChange={e => dispatch(setCanvasMessage(e.target.value))}
+        />
       </label>
       <label className="options-popover-row">
         <Button onClick={() => handleDownload()}>Download Image</Button>
