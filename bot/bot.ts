@@ -21,14 +21,16 @@ const createButton = (
   interactionId: string,
   userId: string,
   channelId: string,
-  channelName: string
+  channelName: string,
+  targetId?: string
 ) => {
   const secret = process.env.SECRET!
   const cryptr = new Cryptr(secret)
   const object = {
     iid: interactionId,
     uid: userId,
-    cid: channelId
+    cid: channelId,
+    tid: targetId
   }
   const pid = cryptr.encrypt(JSON.stringify(object))
 
@@ -75,7 +77,7 @@ app.post('/send', (req, res) => {
   const cryptr = new Cryptr(secret)
   const session = cryptr.decrypt(pid)
 
-  const { iid, uid, cid } = JSON.parse(session)
+  const { iid, uid, cid, tid } = JSON.parse(session)
 
   if (!iid || !uid || !cid) {
     throw new Error('Invalid PID')
@@ -95,8 +97,12 @@ app.post('/send', (req, res) => {
   const date = new Date().toLocaleString()
 
   console.log(`${uid} just ${word} in #${channel?.name} (${guild?.name}) at ${date}. ${message}`)
+
   channel.send({
     content: `<@${uid}> ${word}:${message?.trim() ? `\n> ${message}` : ''}`,
+    reply: {
+      messageReference: tid
+    },
     files: [attachment]
   })
 
@@ -106,17 +112,19 @@ app.post('/send', (req, res) => {
 })
 
 bot.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) {
+  if (!interaction.isCommand() && !interaction.isUserContextMenuCommand()) {
     return
   }
 
   const { commandName, user, channel, channelId } = interaction
+  const targetId = (interaction as any)?.targetId
+  const channelName = (channel as any).name
 
-  if (commandName !== 'paint') {
+  if (commandName !== 'paint' && !targetId) {
     return
   }
 
-  const button = createButton(interaction.id, user.id, channelId, (channel as any).name)
+  const button = createButton(interaction.id, user.id, channelId, channelName, targetId)
 
   await interaction.reply({
     components: [button as any],
