@@ -126,10 +126,12 @@ bot.on('interactionCreate', async interaction => {
 
   const button = createButton(interaction.id, user.id, channelId, channelName, targetId)
 
-  await interaction.reply({
-    components: [button as any],
-    ephemeral: true
-  })
+  if (interaction.isRepliable()) {
+    await interaction.reply({
+      components: [button as any],
+      ephemeral: true
+    })
+  }
 })
 
 bot.on('ready', () => {
