@@ -121,7 +121,7 @@ bot.on('interactionCreate', async interaction => {
       return
     }
 
-    await interaction.deferReply()
+    await interaction.deferReply({ ephemeral: true })
 
     const { commandName, user, channel, channelId } = interaction
     const targetId = (interaction as any)?.targetId
