@@ -121,6 +121,8 @@ bot.on('interactionCreate', async interaction => {
       return
     }
 
+    await interaction.deferReply()
+
     const { commandName, user, channel, channelId } = interaction
     const targetId = (interaction as any)?.targetId
     const channelName = (channel as any).name
@@ -131,14 +133,10 @@ bot.on('interactionCreate', async interaction => {
 
     const button = createButton(interaction.id, user.id, channelId, channelName, targetId)
 
-    if (!interaction.deferred) {
-      await interaction.reply({
-        components: [button as any],
-        ephemeral: true
-      })
-    }
-
-    await interaction.deferReply()
+    await interaction.reply({
+      components: [button as any],
+      ephemeral: true
+    })
   } catch (err) {
     console.error(err)
   }
