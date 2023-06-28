@@ -131,12 +131,14 @@ bot.on('interactionCreate', async interaction => {
 
     const button = createButton(interaction.id, user.id, channelId, channelName, targetId)
 
-    if (interaction.isRepliable()) {
+    if (!interaction.deferred) {
       await interaction.reply({
         components: [button as any],
         ephemeral: true
       })
     }
+
+    await interaction.deferReply()
   } catch (err) {
     console.error(err)
   }
